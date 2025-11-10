@@ -1,11 +1,94 @@
-version: "3.8"
 services:
+  # RabbitMQ Message Broker
   rabbitmq:
     image: rabbitmq:3-management
-    container_name: rabbitmq
+    container_name: dns-rabbitmq
     ports:
-      - "5672:5672" # Queue port for services
+      - "5672:5672" # AMQP port for services
       - "15672:15672" # Web management dashboard
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dns-network
+
+  # MySQL Database - Serves multiple databases for different services
+  mysql:
+    image: mysql:8.0
+    container_name: dns-mysql
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dns-network
+
+  # Gateway Service
+  # gateway:
+  #   build:
+  #     context: ./gateway-fastify
+  #     dockerfile: Dockerfile
+  #   container_name: dns-gateway
+  #   ports:
+  #     - "3000:3000"
+  #   env_file:
+  #     - ./gateway-fastify/.env
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+  #   networks:
+  #     - dns-network
+  #   restart: unless-stopped
+
+  # Email Service
+  email-service:
+    build:
+      context: ./services/email-service
+      dockerfile: Dockerfile
+    container_name: dns-email-service
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./services/email-service/.env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - dns-network
+    restart: unless-stopped
+
+  # Template Service
+  template-service:
+    build:
+      context: ./services/template-service
+      dockerfile: Dockerfile
+    container_name: dns-template-service
+    ports:
+      - "3002:3002"
+    env_file:
+      - ./services/template-service/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - dns-network
+    restart: unless-stopped
+
+networks:
+  dns-network:
+    driver: bridge
+
+volumes:
+  mysql-data:

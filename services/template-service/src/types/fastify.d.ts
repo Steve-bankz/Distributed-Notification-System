@@ -4,11 +4,7 @@ declare module "fastify" {
   interface FastifyInstance {
     config: {
       PORT: number;
-      SMTP_USER: string;
-      SMTP_PASS: string;
-      SMTP_PORT: number;
-      SMTP_HOST: string;
-      RABBITMQ_CONNECTION_URL: string;
+      DB_URL: string;
       NODE_ENV: "development" | "production";
     };
   }

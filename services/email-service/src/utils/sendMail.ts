@@ -7,11 +7,11 @@ let transporter: Transporter;
 
 function createTransporter(): Transporter {
   return nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
-    port: 2525,
+    host: app.config.SMTP_HOST,
+    port: app.config.SMTP_PORT,
     auth: {
-      user: app.config.MAILTRAP_USER,
-      pass: app.config.MAILTRAP_PASS,
+      user: app.config.SMTP_USER,
+      pass: app.config.SMTP_PASS,
     },
   });
 }
