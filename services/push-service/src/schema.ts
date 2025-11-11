@@ -1,0 +1,25 @@
+export const envSchema = {
+  type: "object",
+  required: [
+    "PORT",
+    "FCM_PRIVATE_KEY",
+    "FCM_CLIENT_EMAIL",
+    "FCM_PROJECT_ID",
+    "NODE_ENV",
+    "SERVICE_NAME",
+    "CONSUL_HOST",
+    "CONSUL_PORT",
+    "RABBITMQ_CONNECTION_URL",
+  ],
+  properties: {
+    PORT: { type: "number", default: 3003 },
+    FCM_PRIVATE_KEY: { type: "string" },
+    FCM_CLIENT_EMAIL: { type: "string" },
+    FCM_PROJECT_ID: { type: "string" },
+    RABBITMQ_CONNECTION_URL: { type: "string" },
+    SERVICE_NAME: { type: "string" },
+    CONSUL_HOST: { type: "string" },
+    CONSUL_PORT: { type: "number" },
+    NODE_ENV: { type: "string", default: "development" },
+  },
+};
