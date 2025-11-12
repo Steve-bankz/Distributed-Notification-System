@@ -15,6 +15,7 @@ services:
     networks:
       - dns-network
     restart: unless-stopped
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: dns-rabbitmq
@@ -66,31 +67,19 @@ services:
       - dns-network
 
   # Gateway Service
-  gateway:
+  gateway-service:
     build:
-      context: ./services/gateway-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/gateway-service/Dockerfile
     container_name: dns-gateway
     ports:
       - "3000:3000"
     env_file:
-      - ./services/gateway-service/.env
-    environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_PASSWORD: "" # if you use a password, set it here
-      TEMPLATE_SERVICE_URL: http://template-service:3002
-      USER_SERVICE_URL: http://user-service:8000
+      - ./services/gateway-service/.env.production
     depends_on:
       rabbitmq:
         condition: service_healthy
       redis:
-        condition: service_healthy
-      template-service:
-        condition: service_healthy
-      email-service:
-        condition: service_healthy
-      push-service:
         condition: service_healthy
     networks:
       - dns-network
@@ -99,18 +88,13 @@ services:
   # Email Service
   email-service:
     build:
-      context: ./services/email-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/email-service/Dockerfile
     container_name: dns-email-service
     ports:
       - "3001:3001"
     env_file:
-      - ./services/email-service/.env
-    environment:
-      - CONSUL_HOST=consul
-      - CONSUL_PORT=8500
-      - SERVICE_NAME=email-service
-      - SERVICE_PORT=3001
+      - ./services/email-service/.env.production
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -119,20 +103,17 @@ services:
     networks:
       - dns-network
     restart: unless-stopped
+
+  # Template Service
   template-service:
     build:
-      context: ./services/template-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/template-service/Dockerfile
     container_name: dns-template-service
     ports:
       - "3002:3002"
     env_file:
-      - ./services/template-service/.env
-    environment:
-      - CONSUL_HOST=consul
-      - CONSUL_PORT=8500
-      - SERVICE_NAME=template-service
-      - SERVICE_PORT=3002
+      - ./services/template-service/.env.production
     depends_on:
       mysql:
         condition: service_healthy
@@ -145,19 +126,39 @@ services:
   # Push Service
   push-service:
     build:
-      context: ./services/push-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/push-service/Dockerfile
     container_name: dns-push-service
     ports:
       - "3003:3003"
     env_file:
-      - ./services/push-service/.env
-    environment:
-      - CONSUL_HOST=consul
-      - CONSUL_PORT=8500
-      - SERVICE_NAME=push-service
-      - SERVICE_PORT=3003
+      - ./services/push-service/.env.production
     depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      consul:
+        condition: service_healthy
+    networks:
+      - dns-network
+    restart: unless-stopped
+ 
+  # User Service (Laravel + Octane)
+  user-service:
+    build:
+      context: ./services/user-service
+      dockerfile: Dockerfile
+    container_name: dns-user-service
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./services/user-service/.env.production
+    volumes:
+      - ./services/user-service/storage:/var/www/html/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
       rabbitmq:
         condition: service_healthy
       consul:

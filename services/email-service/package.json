@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "lint": "echo 'No linter configured for email-service'",
+    "type-check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.8",
+    "@types/mustache": "^4.2.6",
     "@types/nodemailer": "^7.0.3",
     "@types/opossum": "^8.1.9",
     "tsconfig-paths": "^4.2.0",

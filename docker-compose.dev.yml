@@ -1,0 +1,45 @@
+services:
+  gateway-service:
+    build:
+      context: ./services/gateway-service
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./services/gateway-service/src:/app/src
+      - ./services/gateway-service/test:/app/test
+    command: pnpm run start:dev
+
+  push-service:
+    build:
+      context: ./services/push-service
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./services/push-service:/app
+    command: pnpm dev
+
+  email-service:
+    build:
+      context: ./services/email-service
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./services/email-service/src:/app/src
+    command: pnpm run dev
+
+  template-service:
+    build:
+      context: .
+      dockerfile: services/template-service/Dockerfile.dev
+    volumes:
+      - ./services/template-service/src:/app/src
+    command: pnpm run dev
+
+  user-service:
+    build:
+      context: ./services/user-service
+      dockerfile: Dockerfile.dev
+
+    volumes:
+      - ./services/user-service:/var/www/html
+      - ./services/user-service/storage:/var/www/html/storage
+      - ./services/user-service/bootstrap/cache:/var/www/html/bootstrap/cache

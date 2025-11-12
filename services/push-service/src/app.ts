@@ -8,13 +8,13 @@ import { envSchema as schema } from "./schema.js";
 import { pushRoutes } from "./routes/push.routes.js";
 import { HealthResponseSchema } from "./schema/push.schema.js";
 
-const app = Fastify({ logger: true });
+const app = Fastify({ logger: true })
 
 await app.register(env, {
   confKey: "config",
   schema,
   dotenv: true,
-});
+})
 
 // Register Swagger
 await app.register(swagger, {
@@ -68,4 +68,4 @@ app.get("/health", {
   });
 });
 
-export default app;
+export default app
