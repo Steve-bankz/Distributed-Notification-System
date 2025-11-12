@@ -31,6 +31,21 @@ services:
     networks:
       - dns-network
 
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    container_name: dns-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dns-network
+    restart: unless-stopped
+
   # MySQL Database - Serves multiple databases for different services
   mysql:
     image: mysql:8.0
@@ -83,7 +98,6 @@ services:
       - dns-network
     restart: unless-stopped
 
-
   # Email Service
   email-service:
     build:
@@ -122,6 +136,22 @@ services:
       - dns-network
     restart: unless-stopped
 
+  # Push Service
+  push-service:
+    build:
+      context: ./services/push-service
+      dockerfile: Dockerfile
+    container_name: dns-push-service
+    ports:
+      - "3003:3003"
+    env_file:
+      - ./services/push-service/.env
+    environment:
+      - CONSUL_HOST=consul
+      - CONSUL_PORT=8500
+      - SERVICE_NAME=push-service
+      - SERVICE_PORT=3003
+    depends_on:
   # User Service (Laravel + Octane)
   user-service:
     build:
