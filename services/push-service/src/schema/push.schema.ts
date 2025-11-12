@@ -1,135 +1,114 @@
 export const PushNotificationSchema = {
-  type: 'object',
-  required: ['token', 'title', 'body'],
+  type: "object",
+  required: ["token", "title", "body"],
   properties: {
     token: {
-      type: 'string',
-      description: 'FCM device token',
-      example: 'fcm_token_string_here'
+      type: "string",
+      description: "FCM device token",
     },
     title: {
-      type: 'string',
-      description: 'Notification title',
-      example: 'New Message'
+      type: "string",
+      description: "Notification title",
     },
     body: {
-      type: 'string',
-      description: 'Notification body text',
-      example: 'You have received a new message'
+      type: "string",
+      description: "Notification body text",
     },
     image: {
-      type: 'string',
-      description: 'Optional image URL for the notification',
-      example: 'https://example.com/image.jpg'
+      type: "string",
+      description: "Optional image URL for the notification",
     },
     link: {
-      type: 'string',
-      description: 'Optional deep link to open when notification is clicked',
-      example: 'https://example.com/messages/123'
+      type: "string",
+      description: "Optional deep link to open when notification is clicked",
     },
     data: {
-      type: 'object',
-      description: 'Optional custom data payload',
+      type: "object",
+      description: "Optional custom data payload",
       additionalProperties: {
-        type: 'string'
+        type: "string",
       },
-      example: {
-        messageId: '12345',
-        userId: 'user123'
-      }
     },
     priority: {
-      type: 'string',
-      enum: ['high', 'normal'],
-      description: 'Notification priority',
-      example: 'normal'
+      type: "string",
+      enum: ["high", "normal"],
+      description: "Notification priority",
     },
     ttl: {
-      type: 'number',
-      description: 'Time to live in seconds',
-      example: 3600
-    }
-  }
+      type: "number",
+      description: "Time to live in seconds",
+    },
+  },
 };
 
 export const TokenValidationSchema = {
-  type: 'object',
-  required: ['token'],
+  type: "object",
+  required: ["token"],
   properties: {
     token: {
-      type: 'string',
-      description: 'FCM device token to validate',
-      example: 'fcm_token_string_here'
-    }
-  }
+      type: "string",
+      description: "FCM device token to validate",
+    },
+  },
 };
 
 export const PushNotificationResponseSchema = {
-  type: 'object',
+  type: "object",
   properties: {
     success: {
-      type: 'boolean',
-      description: 'Whether the operation was successful',
-      example: true
+      type: "boolean",
+      description: "Whether the operation was successful",
     },
     messageId: {
-      type: 'string',
-      description: 'FCM message ID if successful',
-      example: 'projects/project-id/messages/message-id'
+      type: "string",
+      description: "FCM message ID if successful",
     },
     error: {
-      type: 'string',
-      description: 'Error message if failed',
-      example: 'Invalid registration token'
-    }
-  }
+      type: "string",
+      description: "Error message if failed",
+    },
+  },
 };
 
 export const TokenValidationResponseSchema = {
-  type: 'object',
+  type: "object",
   properties: {
     valid: {
-      type: 'boolean',
-      description: 'Whether the token is valid',
-      example: true
-    }
-  }
+      type: "boolean",
+      description: "Whether the token is valid",
+    },
+  },
 };
 
 export const ErrorResponseSchema = {
-  type: 'object',
+  type: "object",
   properties: {
     error: {
-      type: 'string',
-      description: 'Error message',
-      example: 'Internal server error'
+      type: "string",
+      description: "Error message",
     },
     statusCode: {
-      type: 'number',
-      description: 'HTTP status code',
-      example: 500
-    }
-  }
+      type: "number",
+      description: "HTTP status code",
+    },
+  },
 };
 
 export const HealthResponseSchema = {
-  type: 'object',
+  type: "object",
   properties: {
     status: {
-      type: 'string',
-      description: 'Service health status',
-      example: 'ok'
+      type: "string",
+      description: "Service health status",
     },
     timestamp: {
-      type: 'string',
-      format: 'date-time',
-      description: 'Current timestamp',
-      example: '2023-12-07T10:30:00.000Z'
+      type: "string",
+      format: "date-time",
+      description: "Current timestamp",
     },
     uptime: {
-      type: 'number',
-      description: 'Service uptime in seconds',
-      example: 3600
-    }
-  }
+      type: "number",
+      description: "Service uptime in seconds",
+    },
+  },
 };

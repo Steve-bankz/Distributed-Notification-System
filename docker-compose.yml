@@ -74,7 +74,7 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - ./gateway-fastify/.env
+      - ./services/gateway-service/.env
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
