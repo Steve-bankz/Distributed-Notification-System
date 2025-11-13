@@ -1,4 +1,6 @@
+# =========================
 # Build stage
+# =========================
 FROM node:20-alpine AS builder
 
 # Install pnpm
@@ -6,19 +8,24 @@ RUN npm install -g pnpm@10.20.0
 
 WORKDIR /app
 
-# Copy package files
-COPY package.json pnpm-lock.yaml ./
+# Copy root workspace files (relative to repo root)
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 
-# Install dependencies
-RUN pnpm install --frozen-lockfile
+# Copy template service package.json
+COPY services/template-service/package.json ./services/template-service/
 
-# Copy source code
-COPY . .
+# Install dependencies including dev for build
+RUN pnpm install --frozen-lockfile --filter ./services/template-service...
 
-# Build TypeScript
-RUN pnpm build
+# Copy template service source code
+COPY services/template-service ./services/template-service
 
+# Build the project
+RUN pnpm build --filter ./services/template-service...
+
+# =========================
 # Production stage
+# =========================
 FROM node:20-alpine
 
 # Install pnpm
@@ -26,11 +33,14 @@ RUN npm install -g pnpm@10.20.0
 
 WORKDIR /app
 
-# Copy package files
-COPY package.json pnpm-lock.yaml ./
+# Copy root workspace files
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 
-# Install production dependencies only
-RUN pnpm install --prod --frozen-lockfile
+# Copy template service package.json
+COPY services/template-service/package.json ./services/template-service/
+
+# Install only production dependencies
+RUN pnpm install --prod --frozen-lockfile --filter ./services/template-service...
 
 # Copy built files from builder
 COPY --from=builder /app/dist ./dist
