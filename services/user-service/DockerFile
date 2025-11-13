@@ -1,0 +1,52 @@
+# =========================
+# Build stage
+# =========================
+FROM node:20-alpine AS builder
+
+# Install pnpm
+RUN npm install -g pnpm@10.20.0
+
+WORKDIR /app
+
+# Copy root workspace files (relative to repo root)
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+
+# Copy user service package.json
+COPY services/user-service/package.json ./services/user-service/
+
+# Install dependencies including dev for build
+RUN pnpm install --frozen-lockfile --filter ./services/user-service...
+
+# Copy user service source code
+COPY services/user-service ./services/user-service
+
+# Build the project
+RUN pnpm build --filter ./services/user-service...
+
+# =========================
+# Production stage
+# =========================
+FROM node:20-alpine
+
+# Install pnpm
+RUN npm install -g pnpm@10.20.0
+
+WORKDIR /app
+
+# Copy root workspace files
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+
+# Copy user service package.json
+COPY services/user-service/package.json ./services/user-service/
+
+# Install only production dependencies
+RUN pnpm install --prod --frozen-lockfile --filter ./services/user-service...
+
+# Copy built files from builder
+COPY --from=builder /app/dist ./dist
+
+# Expose port
+EXPOSE 3002
+
+# Start the application
+CMD ["node", "dist/server.js"]

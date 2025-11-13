@@ -1,0 +1,25 @@
+# Development Dockerfile for gateway-service
+FROM node:20-alpine
+
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Set the working directory to the root of the monorepo
+WORKDIR /app
+
+# Dependency Installation 
+
+COPY pnpm-workspace.yaml ./
+COPY package.json ./
+COPY pnpm-lock.yaml ./
+COPY services/user-service/package.json ./services/user-service/
+
+ENV NODE_ENV=development
+
+RUN pnpm install --ignore-scripts
+
+COPY services/user-service ./services/user-service/
+
+EXPOSE 3004
+
+CMD ["pnpm", "--filter", "user-service", "dev"]

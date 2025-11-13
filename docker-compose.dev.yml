@@ -39,6 +39,5 @@ services:
       dockerfile: ./services/user-service/Dockerfile.dev
 
     volumes:
-      - ./services/user-service:/var/www/html
-      - ./services/user-service/storage:/var/www/html/storage
-      - ./services/user-service/bootstrap/cache:/var/www/html/bootstrap/cache
+      - ./services/user-service:/app/services/user-service
+      - /app/services/user-service/node_modules
