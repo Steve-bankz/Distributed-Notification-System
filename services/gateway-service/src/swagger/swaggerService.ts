@@ -1,10 +1,10 @@
-import { INestApplication, Injectable, Logger } from "@nestjs/common"
 import { HttpService } from "@nestjs/axios"
-import { lastValueFrom } from "rxjs"
-import merge from "lodash.merge"
+import { INestApplication, Injectable, Logger } from "@nestjs/common"
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import { FastifyInstance } from "fastify"
-import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger"
+import merge from "lodash.merge"
 import * as CircuitBreaker from "opossum"
+import { lastValueFrom } from "rxjs"
 import { ConsulService } from "../consul/consul.service"
 
 interface MicroserviceSpec {
@@ -44,7 +44,7 @@ export class SwaggerGateway {
     )
   }
 
-  async setup(app: INestApplication) {
+  setup(app: INestApplication) {
     const fastifyApp = app.getHttpAdapter().getInstance() as FastifyInstance
 
     // Endpoint to serve merged Swagger JSON dynamically

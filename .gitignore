@@ -41,27 +41,9 @@ coverage/
 *.js.map
 *.d.ts.map
 
-# Laravel (user-service)
-services/user-service/vendor/
-services/user-service/bootstrap/cache/*
-!services/user-service/bootstrap/cache/.gitkeep
-services/user-service/storage/framework/cache/*
-!services/user-service/storage/framework/cache/.gitkeep
-services/user-service/storage/framework/sessions/*
-!services/user-service/storage/framework/sessions/.gitkeep
-services/user-service/storage/framework/views/*
-!services/user-service/storage/framework/views/.gitkeep
-services/user-service/storage/logs/*
-!services/user-service/storage/logs/.gitkeep
-services/user-service/public/hot
-services/user-service/public/storage
-services/user-service/public/build
-services/user-service/.phpunit.result.cache
-services/user-service/Homestead.json
-services/user-service/Homestead.yaml
-services/user-service/auth.json
-services/user-service/npm-debug.log
-services/user-service/yarn-error.log
+
+# Ignore entire user-service folder
+user-service-php
 
 # MySQL data
 mysql-data/

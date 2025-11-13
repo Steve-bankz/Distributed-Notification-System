@@ -1,10 +1,9 @@
 import {
   Injectable,
   Logger,
-  OnModuleInit,
   OnModuleDestroy,
+  OnModuleInit,
 } from "@nestjs/common"
-import fetch from "node-fetch"
 
 @Injectable()
 export class ConsulService implements OnModuleInit, OnModuleDestroy {
@@ -23,18 +22,13 @@ export class ConsulService implements OnModuleInit, OnModuleDestroy {
   }
 
   public async registerService() {
-    const serviceAddress =
-      this.CONSUL_HOST === "localhost"
-        ? "host.docker.internal"
-        : this.SERVICE_NAME
-
     const body = {
       Name: this.SERVICE_NAME,
       ID: `${this.SERVICE_NAME}-${this.PORT}`,
-      Address: serviceAddress,
+      Address: this.SERVICE_NAME,
       Port: Number(this.PORT),
       Check: {
-        HTTP: `http://${serviceAddress}:${this.PORT}/health`,
+        HTTP: `http://${this.SERVICE_NAME}:${this.PORT}/api/v1/health`,
         Interval: "10s",
       },
     }
@@ -49,7 +43,7 @@ export class ConsulService implements OnModuleInit, OnModuleDestroy {
     )
 
     this.logger.log(
-      `[${this.SERVICE_NAME}] Registered with Consul at ${serviceAddress}:${this.PORT}`,
+      `[${this.SERVICE_NAME}] Registered with Consul at ${this.CONSUL_HOST}:${this.CONSUL_PORT}`,
     )
   }
 

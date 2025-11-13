@@ -1,25 +1,25 @@
-# Development Dockerfile for email-service
+# Development Dockerfile for gateway-service
 FROM node:20-alpine
 
-# Install pnpm
-RUN npm install -g pnpm@10.20.0
+# Install pnpm globally
+RUN npm install -g pnpm
 
+# Set the working directory to the root of the monorepo
 WORKDIR /app
 
-# Copy root workspace files
-COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+# Dependency Installation 
 
-# Copy email service package.json
+COPY pnpm-workspace.yaml ./
+COPY package.json ./
+COPY pnpm-lock.yaml ./
 COPY services/email-service/package.json ./services/email-service/
 
-# Install only this service's dependencies (dev + prod)
-RUN pnpm install --filter ./services/email-service...
+ENV NODE_ENV=development
 
-# Copy source code
-COPY services/email-service ./services/email-service
+RUN pnpm install --ignore-scripts
 
-# Expose port for development
+COPY services/email-service ./services/email-service/
+
 EXPOSE 3001
 
-# Start the app in watch mode
-CMD ["pnpm", "dev"]
+CMD pnpm --filter email-service run dev

@@ -1,25 +1,25 @@
-# Development Dockerfile for push-service
+# Development Dockerfile for gateway-service
 FROM node:20-alpine
 
-# Install pnpm
-RUN npm install -g pnpm@10.20.0
+# Install pnpm globally
+RUN npm install -g pnpm
 
+# Set the working directory to the root of the monorepo
 WORKDIR /app
 
-# Copy root workspace files
-COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+# Dependency Installation 
 
-# Copy push service package.json
+COPY pnpm-workspace.yaml ./
+COPY package.json ./
+COPY pnpm-lock.yaml ./
 COPY services/push-service/package.json ./services/push-service/
 
-# Install only this service's dependencies (dev + prod)
-RUN pnpm install --filter ./services/push-service...
+ENV NODE_ENV=development
 
-# Copy source code
-COPY services/push-service ./services/push-service
+RUN pnpm install --ignore-scripts
 
-# Expose port for development
+COPY services/push-service ./services/push-service/
+
 EXPOSE 3003
 
-# Start the app in watch mode
-CMD ["pnpm", "dev"]
+CMD ["pnpm", "--filter", "push-service", "dev"]

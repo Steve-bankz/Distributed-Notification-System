@@ -6,8 +6,8 @@ import {
 } from "@nestjs/platform-fastify"
 import * as dotenv from "dotenv"
 import { AppModule } from "./app.module"
-import { SwaggerGateway } from "./swagger/swaggerService"
 import { ConsulService } from "./consul/consul.service"
+import { SwaggerGateway } from "./swagger/swaggerService"
 
 dotenv.config()
 
@@ -33,7 +33,7 @@ async function bootstrap() {
 
   // Setup Swagger UI
   const swaggerGateway = app.get(SwaggerGateway)
-  await swaggerGateway.setup(app)
+  swaggerGateway.setup(app)
 
   // -------------------------
   // Register with Consul
@@ -49,8 +49,18 @@ async function bootstrap() {
     process.exit(0)
   }
 
-  process.on("SIGINT", () => gracefulShutdown("SIGINT"))
-  process.on("SIGTERM", () => gracefulShutdown("SIGTERM"))
+  process.on("SIGINT", () => {
+    gracefulShutdown("SIGINT").catch(err => {
+      console.error("Error during graceful shutdown (SIGINT):", err)
+      process.exit(1)
+    })
+  })
+  process.on("SIGTERM", () => {
+    gracefulShutdown("SIGTERM").catch(err => {
+      console.error("Error during graceful shutdown (SIGTERM):", err)
+      process.exit(1)
+    })
+  })
 
   // -------------------------
   // Start server

@@ -7,8 +7,7 @@ export class HealthController {
     return {
       success: true,
       data: { status: "ok" },
-      message: "healthy",
-      meta: null,
+      message: "gateway service healthy",
     }
   }
 }

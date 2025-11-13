@@ -19,10 +19,10 @@ async function registerService() {
   const body = {
     Name: app.config.SERVICE_NAME,
     ID: `${app.config.SERVICE_NAME}-${app.config.PORT}`,
-    Address: app.config.CONSUL_HOST,
+    Address: app.config.SERVICE_NAME,
     Port: app.config.PORT,
     Check: {
-      HTTP: `http://${app.config.CONSUL_HOST}:${app.config.PORT}/health`,
+      HTTP: `http://${app.config.SERVICE_NAME}:${app.config.PORT}/health`,
       Interval: "10s",
     },
   }
@@ -37,7 +37,7 @@ async function registerService() {
   )
 
   console.log(
-    `[${app.config.SERVICE_NAME}] Registered with Consul at ${app.config.CONSUL_HOST}:${app.config.PORT}`,
+    `[${app.config.SERVICE_NAME}] Registered with Consul at ${app.config.SERVICE_NAME}:${app.config.PORT}`,
   )
 }
 

@@ -1,41 +1,24 @@
-.PHONY: help build up up-build down restart logs logs-<service> clean ps shell shell-<service> dev dev-<service> rebuild-<service> health
-
-# ----------------------------
-# Default target
-# ----------------------------
-help:
-	@echo "Distributed Notification System - Docker Commands"
-	@echo ""
-	@echo "Usage: make [target]"
-	@echo ""
-	@echo "Production Commands:"
-	@echo "  build                Build all Docker images"
-	@echo "  up                   Start all services (production)"
-	@echo "  up-build             Build and start all services (production)"
-	@echo "  down                 Stop all services"
-	@echo "  restart              Restart all services"
-	@echo "  logs                 View logs from all services"
-	@echo "  logs-<service>       View logs for a specific service (gateway, email, template, user, push, rabbitmq, mysql)"
-	@echo "  clean                Stop services and remove volumes + prune system"
-	@echo "  ps                   List running containers"
-	@echo "  shell-<service>      Access container shell for a specific service"
-	@echo ""
-	@echo "Development Mode (Merged with docker-compose.dev.yml):"
-	@echo "  dev                  Start all services in dev mode"
-	@echo "  dev-build            Build and start all services in dev mode"
-	@echo "  dev-down             Stop all dev services"
-	@echo "  dev-logs             View logs from all dev services"
-	@echo "  dev-logs-<service>   View dev logs for a single service"
-	@echo "  dev-<service>        Start a single service in dev mode"
-	@echo ""
-	@echo "Rebuild Specific Service:"
-	@echo "  rebuild-<service>    Rebuild and restart a specific service"
-
 # ----------------------------
 # Docker management (production)
 # ----------------------------
 build:
 	docker-compose build
+
+# Build single services
+build-gateway-service:
+	docker-compose build gateway-service
+
+build-email-service:
+	docker-compose build email-service
+
+build-template-service:
+	docker-compose build template-service
+
+build-user-service:
+	docker-compose build user-service
+
+build-push-service:
+	docker-compose build push-service
 
 up:
 	docker-compose up -d
@@ -113,19 +96,19 @@ dev-build:
 	docker-compose $(DEV_COMPOSE) up -d --build
 
 dev-build-gateway:
-	docker-compose $(DEV_COMPOSE) build gateway-service
+	docker-compose $(DEV_COMPOSE) build --no-cache gateway-service
 
 dev-build-email:
-	docker-compose $(DEV_COMPOSE) build email-service
+	docker-compose $(DEV_COMPOSE) build --no-cache email-service
 
 dev-build-template:
-	docker-compose $(DEV_COMPOSE) build template-service
+	docker-compose $(DEV_COMPOSE) build --no-cache template-service
 
 dev-build-user:
-	docker-compose $(DEV_COMPOSE) build user-service
+	docker-compose $(DEV_COMPOSE) build --no-cache user-service
 
 dev-build-push:
-	docker-compose $(DEV_COMPOSE) build push-service
+	docker-compose $(DEV_COMPOSE) build --no-cache push-service
 
 dev-down:
 	docker-compose $(DEV_COMPOSE) down
