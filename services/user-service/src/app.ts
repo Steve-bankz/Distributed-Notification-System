@@ -37,7 +37,7 @@ await app.register(swaggerUi, {
   staticCSP: true,
 })
 
-app.register(mysql, {
+await app.register(mysql, {
   promise: true,
   connectionString: app.config.DB_URL,
 })
