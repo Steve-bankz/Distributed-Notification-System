@@ -41,7 +41,7 @@ const loginSchema = {
 }
 
 const authResponseSchema = {
-  200: {
+  201: {
     type: "object",
     properties: {
       success: { type: "boolean" },
