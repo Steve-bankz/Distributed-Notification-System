@@ -70,7 +70,7 @@ export class NotificationsService {
     try {
       userRes = await this.usersService.forwardToUserService(
         "GET",
-        `/api/v1/user`,
+        "/api/v1/user",
         undefined,
         headers,
       )
@@ -115,7 +115,9 @@ export class NotificationsService {
     // --- FIX: END ---
 
     const prefKey =
-      notification_type === NotificationType.EMAIL ? "email" : "push"
+      notification_type === NotificationType.EMAIL
+        ? "email_notification_enabled"
+        : "push_notification_enabled"
     if (!user.preferences || !user.preferences[prefKey]) {
       return {
         success: true,
