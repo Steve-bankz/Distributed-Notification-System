@@ -5,6 +5,12 @@ CREATE DATABASE IF NOT EXISTS template_service;
 -- Create user service database
 CREATE DATABASE IF NOT EXISTS user_service;
 -- TEMPLATE SERVICE SETUP
+
+CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY 'supersecretpassword';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+ALTER USER 'root'@'%' IDENTIFIED BY 'supersecretpassword';
+FLUSH PRIVILEGES;
+
 USE template_service;
 -- Create templates table
 CREATE TABLE IF NOT EXISTS templates (

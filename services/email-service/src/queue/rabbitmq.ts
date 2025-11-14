@@ -91,7 +91,7 @@ export const consume_queue = async (
               "Template",
             ).fire()
 
-            console.log(data)
+            console.log(data, template)
             const html = mustache.render(template.body, data.variables)
 
             await callback({
