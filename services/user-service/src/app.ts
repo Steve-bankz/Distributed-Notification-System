@@ -5,8 +5,8 @@ import swagger from "@fastify/swagger"
 import swaggerUi from "@fastify/swagger-ui"
 import Fastify from "fastify"
 
-import auth_routes from "./routes/auth.routes.js"
 import error_handler from "./lib/utils/error_handler.js"
+import auth_routes from "./routes/auth.routes.js"
 import user_route from "./routes/user.routes.js"
 import env_schema from "./schema/env.schema.js"
 
@@ -37,7 +37,7 @@ await app.register(swaggerUi, {
   staticCSP: true,
 })
 
-await app.register(mysql, {
+app.register(mysql, {
   promise: true,
   connectionString: app.config.DB_URL,
 })

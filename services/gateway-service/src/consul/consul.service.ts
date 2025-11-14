@@ -1,11 +1,5 @@
-import {
-  Injectable,
-  Logger,
-  OnModuleDestroy,
-  OnModuleInit,
-} from "@nestjs/common"
+import { Logger, OnModuleDestroy, OnModuleInit } from "@nestjs/common"
 
-@Injectable()
 export class ConsulService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(ConsulService.name)
   private readonly CONSUL_HOST = process.env.CONSUL_HOST || "localhost"

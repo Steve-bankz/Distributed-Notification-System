@@ -1,89 +1,58 @@
-const registerSchema = {
-  body: {
-    type: "object",
-    required: ["email", "password", "name"],
-    properties: {
-      email: {
-        type: "string",
-        format: "email",
-        description: "User email address",
+// schema/user.schema.ts
+export const user_schema = {
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    user_id: { type: "string", format: "uuid" },
+    name: { type: "string" },
+    email: { type: "string" },
+    preferences: {
+      type: "object",
+      properties: {
+        push_notification_enabled: { type: "boolean" },
+        email_notification_enabled: { type: "boolean" },
       },
-      password: {
-        type: "string",
-        minLength: 6,
-        description: "User password (minimum 6 characters)",
-      },
-      name: {
-        type: "string",
-        minLength: 2,
-        description: "User full name",
-      },
+      additionalProperties: false,
+    },
+    push_tokens: {
+      type: "array",
+      items: { type: "string" },
     },
   },
+  required: ["id", "name", "email", "user_id", "preferences", "push_tokens"],
+  additionalProperties: false,
 }
 
-const loginSchema = {
-  body: {
-    type: "object",
-    required: ["email", "password"],
-    properties: {
-      email: {
-        type: "string",
-        format: "email",
-        description: "User email address",
-      },
-      password: {
-        type: "string",
-        description: "User password",
-      },
-    },
+export const update_user_schema = {
+  type: "object",
+  properties: {
+    name: { type: "string", nullable: true },
+    email: { type: "string", nullable: true },
   },
+  additionalProperties: false,
 }
 
-const authResponseSchema = {
-  201: {
-    type: "object",
-    properties: {
-      success: { type: "boolean" },
-      message: { type: "string" },
-      data: {
-        type: "object",
-        properties: {
-          user: {
-            type: "object",
-            properties: {
-              id: { type: "number" },
-              email: { type: "string" },
-              name: { type: "string" },
-              created_at: { type: "string" },
-            },
-          },
-          token: { type: "string" },
-        },
+export const update_preferences_schema = {
+  type: "object",
+  properties: {
+    preferences: {
+      type: "object",
+      properties: {
+        push_notification_enabled: { type: "boolean", nullable: true },
+        email_notification_enabled: { type: "boolean", nullable: true },
       },
+      additionalProperties: false,
     },
   },
-  400: {
-    type: "object",
-    properties: {
-      success: { type: "boolean" },
-      message: { type: "string" },
-    },
-  },
-  401: {
-    type: "object",
-    properties: {
-      success: { type: "boolean" },
-      message: { type: "string" },
-    },
-  },
-  409: {
-    type: "object",
-    properties: {
-      success: { type: "boolean" },
-      message: { type: "string" },
-    },
-  },
+  required: ["preferences"],
+  additionalProperties: false,
 }
 
-export { registerSchema, loginSchema, authResponseSchema }
+export const push_token_schema = {
+  type: "object",
+  properties: {
+    token: { type: "string" },
+  },
+  required: ["token"],
+  additionalProperties: false,
+}

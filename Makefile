@@ -95,6 +95,8 @@ dev:
 dev-build:
 	docker-compose $(DEV_COMPOSE) up -d --build
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 dev-build-gateway:
 	docker-compose $(DEV_COMPOSE) build --no-cache gateway-service
 
@@ -109,6 +111,28 @@ dev-build-user:
 
 dev-build-push:
 	docker-compose $(DEV_COMPOSE) build --no-cache push-service
+=======
+=======
+>>>>>>> Stashed changes
+# Build single services in dev mode
+dev-build-gateway:
+	docker-compose $(DEV_COMPOSE) build gateway-service
+	
+dev-build-email:
+	docker-compose $(DEV_COMPOSE) build email-service
+
+dev-build-template:
+	docker-compose $(DEV_COMPOSE) build template-service
+
+dev-build-user:
+	docker-compose $(DEV_COMPOSE) build user-service
+
+dev-build-push:
+	docker-compose $(DEV_COMPOSE) build push-service
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 
 dev-down:
 	docker-compose $(DEV_COMPOSE) down

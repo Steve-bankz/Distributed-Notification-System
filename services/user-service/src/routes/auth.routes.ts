@@ -1,11 +1,11 @@
 import type { FastifyInstance } from "fastify"
-import UserModel, { type UserWithoutPassword } from "../models/user.model.js"
 import AuthUtils from "../lib/utils/auth.js"
+import UserModel, { type UserWithoutPassword } from "../models/user.model.js"
 import {
-  registerSchema,
-  loginSchema,
   authResponseSchema,
-} from "../schema/user.schema.js"
+  loginSchema,
+  registerSchema,
+} from "../schema/auth.schema.js"
 
 const auth_routes = async (fastify: FastifyInstance) => {
   const userModel = new UserModel(fastify.mysql)
