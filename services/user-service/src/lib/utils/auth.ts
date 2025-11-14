@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt"
-import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify"
-import type { UserWithoutPassword } from "../../models/user.model.js"
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
+import UserModel, { type UserWithoutPassword } from "../../models/user.model.js"
 
 export class AuthUtils {
   private saltRounds = 10
@@ -18,11 +18,10 @@ export class AuthUtils {
 
   generateToken(fastify: FastifyInstance, user: UserWithoutPassword): string {
     const payload = {
-      id: user.id,
+      user_id: user.user_id,
       email: user.email,
       name: user.name,
     }
-
     return fastify.jwt.sign(payload)
   }
 
@@ -61,12 +60,18 @@ export class AuthUtils {
         token,
       )
 
-      // Attach user to request object
-      request.user = {
-        id: decoded.id,
-        email: decoded.email,
-        name: decoded.name,
+      // Validate user in DB
+      const userModel = new UserModel((request.server as FastifyInstance).mysql)
+      const dbUser = await userModel.findByUserId(decoded.user_id)
+      if (!dbUser) {
+        return reply.status(401).send({
+          success: false,
+          message: "User not found.",
+        })
       }
+
+      // Attach user to request
+      request.user = dbUser
     } catch (error) {
       return reply.status(401).send({
         success: false,
@@ -76,7 +81,7 @@ export class AuthUtils {
   }
 }
 
-// Export the authUser middleware function for easy use in routes
+// Export the authUser middleware function
 export const authUser = (authUtils: AuthUtils) => {
   return authUtils.authUser.bind(authUtils)
 }

@@ -47,11 +47,29 @@ app.register(jwt, {
 })
 
 app.register(auth_routes, { prefix: "/api/v1/auth" })
-app.register(user_route, { prefix: "/api/v1/users" })
+app.register(user_route, { prefix: "/api/v1/user" })
 
-app.get("/health", async (_request, reply) => {
-  reply.send({ status: "ok" })
-})
+app.get(
+  "/health",
+  {
+    schema: {
+      description: "Check if the user service is healthy.",
+      tags: ["Health"],
+      response: {
+        200: {
+          type: "object",
+          properties: {
+            success: { type: "boolean" },
+            message: { type: "string", example: "ok" },
+          },
+        },
+      },
+    },
+  },
+  async (_request, reply) => {
+    reply.send({ success: true, message: "ok" })
+  },
+)
 
 app.setNotFoundHandler((_request, reply) => {
   reply.status(404).send({

@@ -2,6 +2,7 @@ import type { MySQLPool } from "@fastify/mysql"
 
 export interface User {
   id?: number
+  user_id: string
   email: string
   password: string
   name: string
@@ -10,7 +11,7 @@ export interface User {
 }
 
 export interface UserWithoutPassword {
-  id?: number
+  user_id: string
   email: string
   name: string
   created_at?: string
@@ -27,16 +28,14 @@ export class UserModel {
   async create(
     userData: Omit<User, "id" | "created_at" | "updated_at">,
   ): Promise<UserWithoutPassword> {
-    const result = await this.db.execute(
-      "INSERT INTO users (email, password, name) VALUES (?, ?, ?)",
-      [userData.email, userData.password, userData.name],
+    await this.db.execute(
+      "INSERT INTO users (user_id, email, password, name) VALUES (?, ?, ?, ?)",
+      [userData.user_id, userData.email, userData.password, userData.name],
     )
 
-    const insertId = (result as any)[0].insertId
-
     const userResult = await this.db.execute(
-      "SELECT id, email, name, created_at, updated_at FROM users WHERE id = ?",
-      [insertId],
+      "SELECT user_id, email, name, created_at, updated_at FROM users WHERE user_id = ?",
+      [userData.user_id],
     )
 
     const users = (userResult as any)[0] as UserWithoutPassword[]
@@ -53,10 +52,10 @@ export class UserModel {
     return users.length > 0 ? users[0]! : null
   }
 
-  async findById(id: number): Promise<UserWithoutPassword | null> {
+  async findByUserId(user_id: string): Promise<UserWithoutPassword | null> {
     const result = await this.db.execute(
-      "SELECT id, email, name, created_at, updated_at FROM users WHERE id = ?",
-      [id],
+      "SELECT user_id, email, name, preferences, push_tokens, created_at, updated_at FROM users WHERE user_id = ?",
+      [user_id],
     )
 
     const users = (result as any)[0] as UserWithoutPassword[]

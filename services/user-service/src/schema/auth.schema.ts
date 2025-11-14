@@ -1,4 +1,5 @@
 const registerSchema = {
+  tags: ["Auth"],
   body: {
     type: "object",
     required: ["email", "password", "name"],
@@ -20,9 +21,55 @@ const registerSchema = {
       },
     },
   },
+  response: {
+    201: {
+      type: "object",
+      properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+        data: {
+          type: "object",
+          properties: {
+            user: {
+              type: "object",
+              properties: {
+                id: { type: "number" },
+                email: { type: "string" },
+                name: { type: "string" },
+                created_at: { type: "string" },
+              },
+            },
+            token: { type: "string" },
+          },
+        },
+      },
+    },
+    400: {
+      type: "object",
+      properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+      },
+    },
+    401: {
+      type: "object",
+      properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+      },
+    },
+    409: {
+      type: "object",
+      properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+      },
+    },
+  },
 }
 
 const loginSchema = {
+  tags: ["Auth"],
   body: {
     type: "object",
     required: ["email", "password"],
@@ -38,52 +85,44 @@ const loginSchema = {
       },
     },
   },
-}
-
-const authResponseSchema = {
-  201: {
-    type: "object",
-    properties: {
-      success: { type: "boolean" },
-      message: { type: "string" },
-      data: {
-        type: "object",
-        properties: {
-          user: {
-            type: "object",
-            properties: {
-              id: { type: "number" },
-              email: { type: "string" },
-              name: { type: "string" },
-              created_at: { type: "string" },
+  response: {
+    200: {
+      type: "object",
+      properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+        data: {
+          type: "object",
+          properties: {
+            user: {
+              type: "object",
+              properties: {
+                id: { type: "number" },
+                email: { type: "string" },
+                name: { type: "string" },
+                created_at: { type: "string" },
+              },
             },
+            token: { type: "string" },
           },
-          token: { type: "string" },
         },
       },
     },
-  },
-  400: {
-    type: "object",
-    properties: {
-      success: { type: "boolean" },
-      message: { type: "string" },
+    400: {
+      type: "object",
+      properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+      },
     },
-  },
-  401: {
-    type: "object",
-    properties: {
-      success: { type: "boolean" },
-      message: { type: "string" },
-    },
-  },
-  409: {
-    type: "object",
-    properties: {
-      success: { type: "boolean" },
-      message: { type: "string" },
+    401: {
+      type: "object",
+      properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+      },
     },
   },
 }
 
-export { registerSchema, loginSchema, authResponseSchema }
+export { loginSchema, registerSchema }

@@ -1,4 +1,60 @@
 # ----------------------------
+# Help
+# ----------------------------
+help:
+	@echo "Available make commands:"
+	@echo "  build                - Build all Docker services"
+	@echo "  build-gateway-service - Build only the gateway service"
+	@echo "  build-email-service   - Build only the email service"
+	@echo "  build-template-service- Build only the template service"
+	@echo "  build-user-service    - Build only the user service"
+	@echo "  build-push-service    - Build only the push service"
+	@echo "  up                   - Start all services in detached mode"
+	@echo "  up-build             - Start all services with build"
+	@echo "  down                 - Stop all services"
+	@echo "  restart              - Restart all services"
+	@echo "  logs                 - Show logs for all services"
+	@echo "  logs-gateway         - Show logs for gateway service"
+	@echo "  logs-email           - Show logs for email service"
+	@echo "  logs-template        - Show logs for template service"
+	@echo "  logs-user            - Show logs for user service"
+	@echo "  logs-push            - Show logs for push service"
+	@echo "  logs-rabbitmq        - Show logs for rabbitmq"
+	@echo "  logs-mysql           - Show logs for mysql"
+	@echo "  clean                - Remove containers and prune system"
+	@echo "  ps                   - List running containers"
+	@echo "  shell-gateway        - Shell into gateway service"
+	@echo "  shell-email          - Shell into email service"
+	@echo "  shell-template       - Shell into template service"
+	@echo "  shell-user           - Shell into user service"
+	@echo "  shell-push           - Shell into push service"
+	@echo "  shell-mysql          - MySQL shell"
+	@echo "  dev                  - Start all services in dev mode"
+	@echo "  dev-build            - Build and start all services in dev mode"
+	@echo "  dev-build-gateway    - Build gateway service in dev mode"
+	@echo "  dev-build-email      - Build email service in dev mode"
+	@echo "  dev-build-template   - Build template service in dev mode"
+	@echo "  dev-build-user       - Build user service in dev mode"
+	@echo "  dev-build-push       - Build push service in dev mode"
+	@echo "  dev-down             - Stop all dev services"
+	@echo "  dev-logs             - Show logs for all dev services"
+	@echo "  dev-logs-gateway     - Show logs for gateway dev service"
+	@echo "  dev-logs-email       - Show logs for email dev service"
+	@echo "  dev-logs-template    - Show logs for template dev service"
+	@echo "  dev-logs-user        - Show logs for user dev service"
+	@echo "  dev-logs-push        - Show logs for push dev service"
+	@echo "  dev-gateway          - Start only gateway service in dev mode"
+	@echo "  dev-email            - Start only email service in dev mode"
+	@echo "  dev-template         - Start only template service in dev mode"
+	@echo "  dev-user             - Start only user service in dev mode"
+	@echo "  dev-push             - Start only push service in dev mode"
+	@echo "  rebuild-gateway      - Rebuild and restart gateway service"
+	@echo "  rebuild-email        - Rebuild and restart email service"
+	@echo "  rebuild-template     - Rebuild and restart template service"
+	@echo "  rebuild-user         - Rebuild and restart user service"
+	@echo "  rebuild-push         - Rebuild and restart push service"
+	@echo "  health               - Check health of all services"
+# ----------------------------
 # Docker management (production)
 # ----------------------------
 build:
@@ -95,8 +151,6 @@ dev:
 dev-build:
 	docker-compose $(DEV_COMPOSE) up -d --build
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 dev-build-gateway:
 	docker-compose $(DEV_COMPOSE) build --no-cache gateway-service
 
@@ -111,28 +165,6 @@ dev-build-user:
 
 dev-build-push:
 	docker-compose $(DEV_COMPOSE) build --no-cache push-service
-=======
-=======
->>>>>>> Stashed changes
-# Build single services in dev mode
-dev-build-gateway:
-	docker-compose $(DEV_COMPOSE) build gateway-service
-	
-dev-build-email:
-	docker-compose $(DEV_COMPOSE) build email-service
-
-dev-build-template:
-	docker-compose $(DEV_COMPOSE) build template-service
-
-dev-build-user:
-	docker-compose $(DEV_COMPOSE) build user-service
-
-dev-build-push:
-	docker-compose $(DEV_COMPOSE) build push-service
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 dev-down:
 	docker-compose $(DEV_COMPOSE) down

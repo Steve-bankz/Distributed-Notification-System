@@ -41,8 +41,6 @@ coverage/
 *.js.map
 *.d.ts.map
 
-
-# Ignore entire user-service folder
 user-service-php
 
 # MySQL data

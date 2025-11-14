@@ -11,6 +11,7 @@ const errorHandler = (
   _request: FastifyRequest,
   reply: FastifyReply,
 ) => {
+  console.log("Error Handler:", error)
   const err = error as IError
 
   reply.status(err.statusCode ?? 500).send({

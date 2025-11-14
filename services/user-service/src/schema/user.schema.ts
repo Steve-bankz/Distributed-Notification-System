@@ -1,8 +1,6 @@
-// schema/user.schema.ts
 export const user_schema = {
   type: "object",
   properties: {
-    id: { type: "integer" },
     user_id: { type: "string", format: "uuid" },
     name: { type: "string" },
     email: { type: "string" },
@@ -19,7 +17,7 @@ export const user_schema = {
       items: { type: "string" },
     },
   },
-  required: ["id", "name", "email", "user_id", "preferences", "push_tokens"],
+  required: ["user_id", "name", "email", "preferences", "push_tokens"],
   additionalProperties: false,
 }
 
